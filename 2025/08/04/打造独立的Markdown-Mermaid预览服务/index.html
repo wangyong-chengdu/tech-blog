@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/tech-blog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/tech-blog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/tech-blog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/tech-blog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/tech-blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wangyong-chengdu.github.io","root":"/tech-blog/","images":"/tech-blog/images","scheme":"Muse","darkmode":false,"version":"8.23.2","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/tech-blog/js/config.js" defer></script>
+
+    <meta name="description" content="从零开始构建一个功能完整的Markdown预览服务，支持Mermaid图表渲染、目录扫描和文件上传">
+<meta property="og:type" content="article">
+<meta property="og:title" content="打造独立的Markdown+Mermaid预览服务">
+<meta property="og:url" content="https://wangyong-chengdu.github.io/tech-blog/2025/08/04/%E6%89%93%E9%80%A0%E7%8B%AC%E7%AB%8B%E7%9A%84Markdown-Mermaid%E9%A2%84%E8%A7%88%E6%9C%8D%E5%8A%A1/index.html">
+<meta property="og:site_name" content="Yong Wang&#39;s Tech Blog">
+<meta property="og:description" content="从零开始构建一个功能完整的Markdown预览服务，支持Mermaid图表渲染、目录扫描和文件上传">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-08-04T03:01:13.000Z">
+<meta property="article:modified_time" content="2025-08-04T04:36:04.028Z">
+<meta property="article:author" content="Yong Wang">
+<meta property="article:tag" content="Node.js">
+<meta property="article:tag" content="Express">
+<meta property="article:tag" content="Markdown">
+<meta property="article:tag" content="Mermaid">
+<meta property="article:tag" content="开源项目">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://wangyong-chengdu.github.io/tech-blog/2025/08/04/%E6%89%93%E9%80%A0%E7%8B%AC%E7%AB%8B%E7%9A%84Markdown-Mermaid%E9%A2%84%E8%A7%88%E6%9C%8D%E5%8A%A1/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://wangyong-chengdu.github.io/tech-blog/2025/08/04/%E6%89%93%E9%80%A0%E7%8B%AC%E7%AB%8B%E7%9A%84Markdown-Mermaid%E9%A2%84%E8%A7%88%E6%9C%8D%E5%8A%A1/","path":"2025/08/04/打造独立的Markdown-Mermaid预览服务/","title":"打造独立的Markdown+Mermaid预览服务"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>打造独立的Markdown+Mermaid预览服务 | Yong Wang's Tech Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/tech-blog/js/utils.js" defer></script><script src="/tech-blog/js/motion.js" defer></script><script src="/tech-blog/js/sidebar.js" defer></script><script src="/tech-blog/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/tech-blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/tech-blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Yong Wang's Tech Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术分享 | 开源项目 | 个人成长</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">项目背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">技术选型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="nav-number">2.1.</span> <span class="nav-text">后端技术栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="nav-number">2.2.</span> <span class="nav-text">前端技术栈</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">核心功能实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9C%AC%E5%9C%B0%E7%9B%AE%E5%BD%95%E6%89%AB%E6%8F%8F"><span class="nav-number">3.1.</span> <span class="nav-text">1. 本地目录扫描</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Mermaid%E5%9B%BE%E8%A1%A8%E6%B8%B2%E6%9F%93"><span class="nav-number">3.2.</span> <span class="nav-text">2. Mermaid图表渲染</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%A4%84%E7%90%86"><span class="nav-number">3.3.</span> <span class="nav-text">3. 文件上传处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E4%BA%AE%E7%82%B9"><span class="nav-number">4.</span> <span class="nav-text">项目亮点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%E7%94%A8%E6%88%B7%E4%BD%93%E9%AA%8C%E4%BC%98%E5%8C%96"><span class="nav-number">4.1.</span> <span class="nav-text">🎯 用户体验优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9A%A1-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-number">4.2.</span> <span class="nav-text">⚡ 性能优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%94%92-%E5%AE%89%E5%85%A8%E8%80%83%E8%99%91"><span class="nav-number">4.3.</span> <span class="nav-text">🔒 安全考虑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">部署与使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E8%BF%90%E8%A1%8C"><span class="nav-number">5.1.</span> <span class="nav-text">本地运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%BC%94%E7%A4%BA"><span class="nav-number">5.2.</span> <span class="nav-text">功能演示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E6%94%B6%E8%8E%B7"><span class="nav-number">6.</span> <span class="nav-text">技术收获</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AA%E6%9D%A5%E8%A7%84%E5%88%92"><span class="nav-number">7.</span> <span class="nav-text">未来规划</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E9%93%BE%E6%8E%A5"><span class="nav-number">8.</span> <span class="nav-text">项目链接</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Yong Wang</p>
+  <div class="site-description" itemprop="description">专注于全栈开发、开源项目和技术创新的个人博客，分享实战经验和技术洞察</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/tech-blog/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://wangyong-chengdu.github.io/tech-blog/2025/08/04/%E6%89%93%E9%80%A0%E7%8B%AC%E7%AB%8B%E7%9A%84Markdown-Mermaid%E9%A2%84%E8%A7%88%E6%9C%8D%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/tech-blog/images/avatar.gif">
+      <meta itemprop="name" content="Yong Wang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yong Wang's Tech Blog">
+      <meta itemprop="description" content="专注于全栈开发、开源项目和技术创新的个人博客，分享实战经验和技术洞察">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="打造独立的Markdown+Mermaid预览服务 | Yong Wang's Tech Blog">
+      <meta itemprop="description" content="从零开始构建一个功能完整的Markdown预览服务，支持Mermaid图表渲染、目录扫描和文件上传">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          打造独立的Markdown+Mermaid预览服务
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-08-04 11:01:13 / 修改时间：12:36:04" itemprop="dateCreated datePublished" datetime="2025-08-04T11:01:13+08:00">2025-08-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/tech-blog/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" itemprop="url" rel="index"><span itemprop="name">技术分享</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/tech-blog/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/" itemprop="url" rel="index"><span itemprop="name">项目实战</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">从零开始构建一个功能完整的Markdown预览服务，支持Mermaid图表渲染、目录扫描和文件上传</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="项目背景"><a href="#项目背景" class="headerlink" title="项目背景"></a>项目背景</h2><p>在日常开发工作中，经常需要预览Markdown文档，特别是包含Mermaid图表的技术文档。虽然市面上有很多Markdown编辑器，但大多数要么功能过于复杂，要么缺乏对Mermaid图表的良好支持。因此，我决定开发一个轻量级、专注的Markdown预览服务。</p>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><h3 id="后端技术栈"><a href="#后端技术栈" class="headerlink" title="后端技术栈"></a>后端技术栈</h3><ul>
+<li><strong>Node.js + Express</strong>: 轻量级Web框架，快速搭建服务</li>
+<li><strong>Marked</strong>: 高性能Markdown解析器</li>
+<li><strong>Multer</strong>: 处理文件上传的中间件</li>
+<li><strong>fs-extra</strong>: 增强的文件系统操作库</li>
+</ul>
+<h3 id="前端技术栈"><a href="#前端技术栈" class="headerlink" title="前端技术栈"></a>前端技术栈</h3><ul>
+<li><strong>原生HTML&#x2F;CSS&#x2F;JavaScript</strong>: 保持轻量，避免框架依赖</li>
+<li><strong>Mermaid.js</strong>: 强大的图表渲染引擎</li>
+<li><strong>响应式设计</strong>: 支持移动端访问</li>
+</ul>
+<h2 id="核心功能实现"><a href="#核心功能实现" class="headerlink" title="核心功能实现"></a>核心功能实现</h2><h3 id="1-本地目录扫描"><a href="#1-本地目录扫描" class="headerlink" title="1. 本地目录扫描"></a>1. 本地目录扫描</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">scanDirectory</span>(<span class="params">dirPath</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> files = [];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">scan</span>(<span class="params">currentPath</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> items = fs.<span class="title function_">readdirSync</span>(currentPath);</span><br><span class="line">        </span><br><span class="line">        items.<span class="title function_">forEach</span>(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> fullPath = path.<span class="title function_">join</span>(currentPath, item);</span><br><span class="line">            <span class="keyword">const</span> stat = fs.<span class="title function_">statSync</span>(fullPath);</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (stat.<span class="title function_">isDirectory</span>()) &#123;</span><br><span class="line">                <span class="title function_">scan</span>(fullPath); <span class="comment">// 递归扫描子目录</span></span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (path.<span class="title function_">extname</span>(item).<span class="title function_">toLowerCase</span>() === <span class="string">&#x27;.md&#x27;</span>) &#123;</span><br><span class="line">                files.<span class="title function_">push</span>(&#123;</span><br><span class="line">                    <span class="attr">name</span>: item,</span><br><span class="line">                    <span class="attr">path</span>: fullPath,</span><br><span class="line">                    <span class="attr">size</span>: stat.<span class="property">size</span>,</span><br><span class="line">                    <span class="attr">modified</span>: stat.<span class="property">mtime</span></span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="title function_">scan</span>(dirPath);</span><br><span class="line">    <span class="keyword">return</span> files;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Mermaid图表渲染"><a href="#2-Mermaid图表渲染" class="headerlink" title="2. Mermaid图表渲染"></a>2. Mermaid图表渲染</h3><p>前端集成Mermaid.js，实现图表的实时渲染：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化Mermaid配置</span></span><br><span class="line">mermaid.<span class="title function_">initialize</span>(&#123;</span><br><span class="line">    <span class="attr">startOnLoad</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">theme</span>: <span class="string">&#x27;default&#x27;</span>,</span><br><span class="line">    <span class="attr">securityLevel</span>: <span class="string">&#x27;loose&#x27;</span>,</span><br><span class="line">    <span class="attr">fontFamily</span>: <span class="string">&#x27;Arial, sans-serif&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 渲染Markdown内容</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">renderMarkdown</span>(<span class="params">content</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> html = <span class="title function_">marked</span>(content);</span><br><span class="line">    <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;preview&#x27;</span>).<span class="property">innerHTML</span> = html;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 重新渲染Mermaid图表</span></span><br><span class="line">    mermaid.<span class="title function_">init</span>(<span class="literal">undefined</span>, <span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.language-mermaid&#x27;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-文件上传处理"><a href="#3-文件上传处理" class="headerlink" title="3. 文件上传处理"></a>3. 文件上传处理</h3><p>使用Multer中间件处理文件上传：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> upload = <span class="title function_">multer</span>(&#123;</span><br><span class="line">    <span class="attr">dest</span>: <span class="string">&#x27;uploads/&#x27;</span>,</span><br><span class="line">    <span class="attr">fileFilter</span>: <span class="function">(<span class="params">req, file, cb</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> allowedTypes = [<span class="string">&#x27;.md&#x27;</span>, <span class="string">&#x27;.markdown&#x27;</span>];</span><br><span class="line">        <span class="keyword">const</span> ext = path.<span class="title function_">extname</span>(file.<span class="property">originalname</span>).<span class="title function_">toLowerCase</span>();</span><br><span class="line">        <span class="title function_">cb</span>(<span class="literal">null</span>, allowedTypes.<span class="title function_">includes</span>(ext));</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">limits</span>: &#123;</span><br><span class="line">        <span class="attr">fileSize</span>: <span class="number">10</span> * <span class="number">1024</span> * <span class="number">1024</span> <span class="comment">// 10MB限制</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">post</span>(<span class="string">&#x27;/api/upload&#x27;</span>, upload.<span class="title function_">array</span>(<span class="string">&#x27;files&#x27;</span>), <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> uploadedFiles = req.<span class="property">files</span>.<span class="title function_">map</span>(<span class="function"><span class="params">file</span> =&gt;</span> (&#123;</span><br><span class="line">        <span class="attr">originalName</span>: file.<span class="property">originalname</span>,</span><br><span class="line">        <span class="attr">filename</span>: file.<span class="property">filename</span>,</span><br><span class="line">        <span class="attr">path</span>: file.<span class="property">path</span>,</span><br><span class="line">        <span class="attr">size</span>: file.<span class="property">size</span></span><br><span class="line">    &#125;));</span><br><span class="line">    </span><br><span class="line">    res.<span class="title function_">json</span>(&#123; <span class="attr">success</span>: <span class="literal">true</span>, <span class="attr">files</span>: uploadedFiles &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="项目亮点"><a href="#项目亮点" class="headerlink" title="项目亮点"></a>项目亮点</h2><h3 id="🎯-用户体验优化"><a href="#🎯-用户体验优化" class="headerlink" title="🎯 用户体验优化"></a>🎯 用户体验优化</h3><ol>
+<li><strong>直观的界面设计</strong>: 清晰的功能分区，操作简单明了</li>
+<li><strong>实时预览</strong>: 无需刷新页面，即时查看渲染效果</li>
+<li><strong>响应式布局</strong>: 完美适配桌面和移动设备</li>
+<li><strong>错误处理</strong>: 友好的错误提示和异常处理</li>
+</ol>
+<h3 id="⚡-性能优化"><a href="#⚡-性能优化" class="headerlink" title="⚡ 性能优化"></a>⚡ 性能优化</h3><ol>
+<li><strong>静态资源缓存</strong>: 合理设置缓存策略</li>
+<li><strong>文件大小限制</strong>: 防止大文件影响性能</li>
+<li><strong>异步处理</strong>: 非阻塞的文件操作</li>
+</ol>
+<h3 id="🔒-安全考虑"><a href="#🔒-安全考虑" class="headerlink" title="🔒 安全考虑"></a>🔒 安全考虑</h3><ol>
+<li><strong>路径验证</strong>: 防止目录遍历攻击</li>
+<li><strong>文件类型检查</strong>: 只允许Markdown文件上传</li>
+<li><strong>输入验证</strong>: 严格的参数校验</li>
+</ol>
+<h2 id="部署与使用"><a href="#部署与使用" class="headerlink" title="部署与使用"></a>部署与使用</h2><h3 id="本地运行"><a href="#本地运行" class="headerlink" title="本地运行"></a>本地运行</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 克隆项目</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/wangyong-chengdu/markdown-mermaid-preview.git</span><br><span class="line"><span class="built_in">cd</span> markdown-mermaid-preview</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">npm install</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动服务</span></span><br><span class="line">npm start</span><br></pre></td></tr></table></figure>
+
+<h3 id="功能演示"><a href="#功能演示" class="headerlink" title="功能演示"></a>功能演示</h3><ol>
+<li><strong>目录扫描</strong>: 输入本地路径，一键扫描所有Markdown文件</li>
+<li><strong>文件上传</strong>: 支持批量上传，自动生成预览链接</li>
+<li><strong>图表渲染</strong>: 完美支持各种Mermaid图表类型</li>
+</ol>
+<h2 id="技术收获"><a href="#技术收获" class="headerlink" title="技术收获"></a>技术收获</h2><p>通过这个项目，我深入学习了：</p>
+<ol>
+<li><strong>Node.js生态</strong>: 熟练使用Express框架和相关中间件</li>
+<li><strong>文件系统操作</strong>: 掌握了文件读写、目录遍历等核心技能</li>
+<li><strong>前后端交互</strong>: 实现了完整的API设计和前端调用</li>
+<li><strong>用户体验设计</strong>: 注重界面友好性和操作便利性</li>
+<li><strong>项目工程化</strong>: 从开发到部署的完整流程</li>
+</ol>
+<h2 id="未来规划"><a href="#未来规划" class="headerlink" title="未来规划"></a>未来规划</h2><ul>
+<li><input disabled="" type="checkbox"> 添加主题切换功能</li>
+<li><input disabled="" type="checkbox"> 支持更多图表类型</li>
+<li><input disabled="" type="checkbox"> 集成代码高亮</li>
+<li><input disabled="" type="checkbox"> 添加文档搜索功能</li>
+<li><input disabled="" type="checkbox"> 支持在线编辑</li>
+</ul>
+<h2 id="项目链接"><a href="#项目链接" class="headerlink" title="项目链接"></a>项目链接</h2><ul>
+<li><strong>GitHub仓库</strong>: <a target="_blank" rel="noopener" href="https://github.com/wangyong-chengdu/markdown-mermaid-preview">markdown-mermaid-preview</a></li>
+<li><strong>在线演示</strong>: 本地运行 <code>http://localhost:3003</code></li>
+<li><strong>技术交流</strong>: <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/yong-wang-019783359/">LinkedIn</a></li>
+</ul>
+<hr>
+<p>这个项目不仅解决了我的实际需求，也是一次很好的技术实践。通过开源分享，希望能帮助到更多有类似需求的开发者。如果你对项目有任何建议或想法，欢迎通过GitHub Issues或LinkedIn与我交流！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tech-blog/tags/Node-js/" rel="tag"># Node.js</a>
+              <a href="/tech-blog/tags/Express/" rel="tag"># Express</a>
+              <a href="/tech-blog/tags/Markdown/" rel="tag"># Markdown</a>
+              <a href="/tech-blog/tags/Mermaid/" rel="tag"># Mermaid</a>
+              <a href="/tech-blog/tags/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/" rel="tag"># 开源项目</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/tech-blog/2025/08/04/%E6%88%91%E7%9A%84%E5%85%A8%E6%A0%88%E5%BC%80%E5%8F%91%E4%B9%8B%E8%B7%AF/" rel="prev" title="我的全栈开发之路">
+                  <i class="fa fa-angle-left"></i> 我的全栈开发之路
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/tech-blog/2025/08/04/hello-world/" rel="next" title="Hello World">
+                  Hello World <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Yong Wang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
